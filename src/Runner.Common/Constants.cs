@@ -154,6 +154,7 @@ namespace GitHub.Runner.Common
                 public static readonly string Node12Warning = "DistributedTask.AddWarningToNode12Action";
                 public static readonly string UseContainerPathForTemplate = "DistributedTask.UseContainerPathForTemplate";
                 public static readonly string AllowRunnerContainerHooks = "DistributedTask.AllowRunnerContainerHooks";
+                public static readonly string AllowRunnerStallDetect = "DistributedTask.AllowRunnerStallDetect";
             }
 
             public static readonly string InternalTelemetryIssueDataKey = "_internal_telemetry";
@@ -201,6 +202,7 @@ namespace GitHub.Runner.Common
             public static readonly string JobStartedStepName = "Set up runner";
             public static readonly string JobCompletedStepName = "Complete runner";
             public static readonly string ContainerHooksPath = "ACTIONS_RUNNER_CONTAINER_HOOKS";
+            public static readonly string StallDetectPath = "ACTIONS_RUNNER_STALL_DETECT";
         }
 
         public static class Path

@@ -146,12 +146,14 @@ namespace GitHub.Runner.Worker.Handlers
                 ExecutionContext.JobContext["Node12ActionsWarnings"].AssertArray("Node12ActionsWarnings").Add(actionDisplayName);
             }
 
-            using (var stdoutManager = new OutputManager(ExecutionContext, ActionCommandManager))
-            using (var stderrManager = new OutputManager(ExecutionContext, ActionCommandManager))
+            using (StallManager stallManager = new StallManager(ExecutionContext))
+            using (OutputManager stdoutManager = new OutputManager(ExecutionContext, ActionCommandManager, null, stallManager),
+                                 stderrManager = new OutputManager(ExecutionContext, ActionCommandManager, null, stallManager))
             {
                 StepHost.OutputDataReceived += stdoutManager.OnDataReceived;
                 StepHost.ErrorDataReceived += stderrManager.OnDataReceived;
 
+                stallManager.Initialize();
                 // Execute the process. Exit code 0 should always be returned.
                 // A non-zero exit code indicates infrastructural failure.
                 // Task failure should be communicated over STDOUT using ## commands.

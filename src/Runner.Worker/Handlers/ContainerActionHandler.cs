@@ -231,9 +231,11 @@ namespace GitHub.Runner.Worker.Handlers
             }
             else
             {
-                using (var stdoutManager = new OutputManager(ExecutionContext, ActionCommandManager, container))
-                using (var stderrManager = new OutputManager(ExecutionContext, ActionCommandManager, container))
+                using (StallManager stallManager = new StallManager(ExecutionContext))
+                using (OutputManager stdoutManager = new OutputManager(ExecutionContext, ActionCommandManager, container, stallManager),
+                                     stderrManager = new OutputManager(ExecutionContext, ActionCommandManager, container, stallManager))
                 {
+                    stallManager.Initialize();
                     var runExitCode = await dockerManager.DockerRun(ExecutionContext, container, stdoutManager.OnDataReceived, stderrManager.OnDataReceived);
                     ExecutionContext.Debug($"Docker Action run completed with exit code {runExitCode}");
                     if (runExitCode != 0)
