@@ -8,6 +8,8 @@ using GitHub.Runner.Worker.Handlers;
 using Moq;
 using Xunit;
 using DTWebApi = GitHub.DistributedTask.WebApi;
+using GitHub.Runner.Common.Util;
+using GitHub.DistributedTask.WebApi;
 
 namespace GitHub.Runner.Common.Tests.Worker
 {
@@ -52,6 +54,7 @@ namespace GitHub.Runner.Common.Tests.Worker
     {
         private Mock<IExecutionContext> _executionContext;
         private List<Tuple<DTWebApi.Issue, string>> _issues;
+        private Variables _variables;
         
         private TestHostContext Setup(
             [CallerMemberName] string name = "",
@@ -62,10 +65,18 @@ namespace GitHub.Runner.Common.Tests.Worker
             _executionContext = new Mock<IExecutionContext>();
             _issues = new List<Tuple<DTWebApi.Issue, string>>();
 
+   // Variables to test for secret scrubbing & FF options
+            _variables = new Variables(hostContext, new Dictionary<string, VariableValue>
+                {
+                    { "DistributedTask.AllowRunnerStallDetect", new VariableValue("true", true) },
+                });
+
             _executionContext.Setup(x => x.Global)
                 .Returns(new GlobalContext
                 {
                     Container = jobContainer,
+                    EnvironmentVariables = new Dictionary<string, string>(VarUtil.EnvironmentVariableKeyComparer),
+                    Variables = _variables,
                     WriteDebug = true,
                 });
             _executionContext.Setup(x => x.AddIssue(It.IsAny<DTWebApi.Issue>(), It.IsAny<string>()))

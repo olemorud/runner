@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Timers;
 using GitHub.Runner.Common;
 using GitHub.Runner.Sdk;
@@ -33,7 +34,7 @@ namespace GitHub.Runner.Worker.Handlers
 
         public StallManager(IExecutionContext executionContext, double interval, ITimer timer)
         {
-            _stallDetectEnabled = FeatureManager.IsStallDetectEnabled(_executionContext.Global?.Variables);
+            _stallDetectEnabled = FeatureManager.IsStallDetectEnabled(_executionContext?.Global?.Variables);
             if (_stallDetectEnabled) {
                 _executionContext = executionContext;
                 _interval = interval;
