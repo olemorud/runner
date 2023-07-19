@@ -19,7 +19,7 @@ namespace GitHub.Runner.Common.Tests.Worker
         public bool _started = false;
         public bool _stopped = false;
         public bool _reset = false;
-
+s
         public double Interval { get; set; }
         public event ElapsedEventHandler Elapsed;
         public bool AutoReset { get; set; }
@@ -79,7 +79,7 @@ namespace GitHub.Runner.Common.Tests.Worker
                     Variables = _variables,
                     WriteDebug = true,
                 });
-            _executionContext.Setup(x => x.AddIssue(It.IsAny<DTWebApi.Issue>(), It.IsAny<string>()))
+            _executionContext.Setup(x => x.AddIssue(It.IsAny<DTWebApi.Issue>(), null))
                 .Callback((DTWebApi.Issue issue, string logMessage) =>
                 {
                     _issues.Add(new Tuple<DTWebApi.Issue, string>(issue, logMessage));

@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Timers;
 using GitHub.Runner.Common;
 using GitHub.Runner.Sdk;
-using GitHub.Runner.Worker;
 
 namespace GitHub.Runner.Worker.Handlers
 {
