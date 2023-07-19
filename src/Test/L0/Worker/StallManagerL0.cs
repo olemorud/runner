@@ -2,8 +2,6 @@ using System;
 using System.Timers;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using GitHub.Runner.Common;
-using GitHub.Runner.Sdk;
 using GitHub.Runner.Worker;
 using GitHub.Runner.Worker.Container;
 using GitHub.Runner.Worker.Handlers;
@@ -64,16 +62,16 @@ namespace GitHub.Runner.Common.Tests.Worker
             _executionContext = new Mock<IExecutionContext>();
             _issues = new List<Tuple<DTWebApi.Issue, string>>();
 
-            _executionContext.Setup(x => x.AddIssue(It.IsAny<DTWebApi.Issue>(), It.IsAny<string>()))
-                .Callback((DTWebApi.Issue issue, string logMessage) =>
-                {
-                    _issues.Add(new Tuple<DTWebApi.Issue, string>(issue, logMessage));
-                });
             _executionContext.Setup(x => x.Global)
                 .Returns(new GlobalContext
                 {
                     Container = jobContainer,
                     WriteDebug = true,
+                });
+            _executionContext.Setup(x => x.AddIssue(It.IsAny<DTWebApi.Issue>(), It.IsAny<string>()))
+                .Callback((DTWebApi.Issue issue, string logMessage) =>
+                {
+                    _issues.Add(new Tuple<DTWebApi.Issue, string>(issue, logMessage));
                 });
 
             return hostContext;
